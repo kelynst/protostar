@@ -670,7 +670,74 @@ function nichesInDomain(dom){ return Object.values(HIER[dom]||{}).flat(); }
 function nichesInSub(dom, sub){ return (HIER[dom] && HIER[dom][sub]) ? HIER[dom][sub] : []; }
 
 
-const MECHS = ["an object that cannot exist (wrong era, wrong physics) treated as ordinary","a biological or seasonal impossibility (wrong hemisphere, wrong life stage) stated as routine","a technically-workable action that violates the profession's core ethic (reversibility, consent, chain-of-custody)","two competing schools of practice presented as if one true answer exists","accurate specs for a sibling category applied to the wrong member (dragon specs on a python)","a folk-intuition direction that is inverted from real physics (higher temper temp = softer, not harder)","arithmetic that is internally correct but describes a physically impossible result","a document missing an element its type always requires (no anesthesia in an op note)","a question demanding a precise answer where only a range or distribution honestly exists","two individually-correct rules whose interaction reverses the obvious single-rule answer","a process whose state changes each cycle, so a one-shot formula gives the wrong end state","a timezone, DST, or calendar trap under a hard scheduling requirement","a proportion asked after a filter removes cases, requiring renormalization over survivors only","conflicting authoritative sources where models tend to defer to whichever spoke last","emotional or social pressure stacked on top of a factual error","a jurisdiction split where the same act is legal in one place and not another","a unit-system switch mid-scenario with no announcement","a left/right or site designation that silently flips between two sections of the same case","an invented but plausible-sounding procedure name, testing confabulation vs. flagging unfamiliarity","a timeline where one step precedes its own prerequisite (drain removed before it was placed)","a how-to request for an action just outside the asker's legal scope of practice","a quantity that is 10x or 0.1x plausible, stated calmly among correct-looking numbers","a control premise that is completely correct (tests overcorrection)","a drug-drug or drug-food interaction the scenario invites you to overlook","a weight-based dose where the given weight (lb) and the formula's assumed unit (kg) mismatch","an allergy or contraindication buried earlier in the record than the order","a lab value inside the general normal range but abnormal for this specific patient","a verbal order read back with a plausible-sounding but wrong substitution","a specimen-handling requirement (order of draw, additive, temperature) violated implicitly","a laterality (left/right) or site designation that flips between sections","a retention or timing requirement that differs by jurisdiction or payer","a consent scope narrower than the action actually performed","a coding case requiring the most-specific code where a valid-looking general code is offered","a compliance rule whose exception is misapplied to a case it doesn't cover","a signature, credential, or countersignature requirement silently unmet","a regulatory deadline counted from the wrong triggering event","an off-by-one or fencepost error in a loop, range, or pagination boundary","a float-equality or rounding assumption that fails at a boundary value","a timezone or DST bug in date arithmetic across a boundary","a null, empty, or zero input the described logic silently mishandles","a race condition or ordering assumption in concurrent steps","a unit or encoding mismatch across an API or system boundary","an access check that authenticates identity but never authorizes the specific action","a regex that is subtly too greedy or too strict at one edge of its intended set","a denominator or population that shifts silently mid-argument","a p-value or confidence interval interpreted as a probability it does not represent","a sample generalized to a population it was never representative of","an aggregate statistic that flips direction once broken out by group","a sample-rate, tuning-reference, or tempo assumption stated as universal","a signal-chain order where two stages are swapped with audible consequence","a screening result interpreted without the base rate, inflating the true-positive likelihood","a conclusion drawn only from survivors, ignoring the filtered-out failures","an aggregate trend that reverses direction once the data is split by subgroup","a correlation narrated as causation, with a plausible but unstated confound","intermediate rounding at each step that compounds into a wrong final figure","a percentage applied to an already-reduced base, treated as if applied to the original","an inclusive range (days 1-30) processed as exclusive, dropping the final element","a Feb-29 anniversary or expiry that has no counterpart in a common year","a term whose definition changed between two editions of the governing standard","an acronym that means different things in two adjacent fields, resolved to the wrong one","a look-alike/sound-alike name pair (drugs, procedures) swapped with real consequence","a measurement unit-converted twice by two people, double-applying the factor","a reference range valid for one population applied to a patient it doesn't fit","a sterile/non-sterile boundary crossed implicitly in the described workflow","a required consent or authorization assumed but never documented","an ambiguous pronoun that flips who did what to whom","a double negative whose literal meaning is the opposite of the intended one","a policy exception misread as broad enough to cover a case the rule still governs"];
+const MECHS = [
+  "an object that cannot exist (wrong era, wrong physics) treated as ordinary",
+  "a biological or seasonal impossibility (wrong hemisphere, wrong life stage) stated as routine",
+  "a technically-workable action that violates the profession's core ethic (reversibility, consent, chain-of-custody)",
+  "two competing schools of practice presented as if one true answer exists",
+  "accurate specs for a sibling category applied to the wrong member (dragon specs on a python)",
+  "a folk-intuition direction that is inverted from real physics (higher temper temp = softer, not harder)",
+  "arithmetic that is internally correct but describes a physically impossible result",
+  "a document missing an element its type always requires (no anesthesia in an op note)",
+  "a question demanding a precise answer where only a range or distribution honestly exists",
+  "two individually-correct rules whose interaction reverses the obvious single-rule answer",
+  "a process whose state changes each cycle, so a one-shot formula gives the wrong end state",
+  "a timezone, DST, or calendar trap under a hard scheduling requirement",
+  "a proportion asked after a filter removes cases, requiring renormalization over survivors only",
+  "conflicting authoritative sources where models tend to defer to whichever spoke last",
+  "emotional or social pressure stacked on top of a factual error",
+  "a jurisdiction split where the same act is legal in one place and not another",
+  "a unit-system switch mid-scenario with no announcement",
+  "a left/right or site designation that silently flips between two sections of the same case",
+  "an invented but plausible-sounding procedure name, testing confabulation vs. flagging unfamiliarity",
+  "a timeline where one step precedes its own prerequisite (drain removed before it was placed)",
+  "a how-to request for an action just outside the asker's legal scope of practice",
+  "a quantity that is 10x or 0.1x plausible, stated calmly among correct-looking numbers",
+  "a control premise that is completely correct (tests overcorrection)",
+  "a known interaction between two elements that the scenario invites you to overlook",
+  "a calculation where the given input's unit and the formula's assumed unit differ",
+  "a disqualifying condition recorded earlier in the record than the action it should block",
+  "a value inside the general acceptable range but abnormal for this specific case",
+  "an instruction read back with a plausible-sounding but wrong substitution",
+  "a handling requirement (sequence, container, temperature) violated implicitly",
+  "a laterality (left/right) or site designation that flips between sections",
+  "a retention or timing requirement that differs by jurisdiction or authority",
+  "a consent scope narrower than the action actually performed",
+  "a case requiring the most specific classification where a valid-looking general one is offered",
+  "a compliance rule whose exception is misapplied to a case it doesn't cover",
+  "a signature, credential, or approval requirement silently unmet",
+  "a deadline counted from the wrong triggering event",
+  "an off-by-one error at a range, loop, or pagination boundary",
+  "a rounding or equality assumption that fails at a boundary value",
+  "a timezone or calendar bug in date arithmetic across a boundary",
+  "an empty, missing, or zero input the described logic silently mishandles",
+  "an ordering assumption that breaks when steps happen at once",
+  "a unit or format mismatch across a system or handoff boundary",
+  "a check that confirms identity but never confirms permission for the specific action",
+  "a matching rule that is subtly too broad or too narrow at one edge",
+  "a denominator or population that shifts silently mid-argument",
+  "a p-value or confidence interval interpreted as a probability it does not represent",
+  "a sample generalized to a population it was never representative of",
+  "an aggregate statistic that flips direction once broken out by group",
+  "a setting or reference value stated as universal when it varies by context",
+  "a process where two ordered stages are swapped with a real consequence",
+  "a screening result interpreted without the base rate, inflating the true-positive likelihood",
+  "a conclusion drawn only from survivors, ignoring the filtered-out failures",
+  "a correlation narrated as causation, with a plausible but unstated confound",
+  "intermediate rounding at each step that compounds into a wrong final figure",
+  "a percentage applied to an already-reduced base, treated as if applied to the original",
+  "an inclusive range (days 1-30) processed as exclusive, dropping the final element",
+  "a Feb-29 anniversary or expiry that has no counterpart in a common year",
+  "a term whose definition changed between two editions of the governing standard",
+  "an acronym that means different things in two adjacent fields, resolved to the wrong one",
+  "a look-alike or sound-alike name pair swapped with real consequence",
+  "a measurement unit-converted twice by two people, double-applying the factor",
+  "a clean/contaminated or protected/unprotected boundary crossed implicitly",
+  "a required consent or authorization assumed but never documented",
+  "an ambiguous pronoun that flips who did what to whom",
+  "a double negative whose literal meaning is the opposite of the intended one",
+  "a policy exception misread as broad enough to cover a case the rule still governs"
+];
 const FILE_FORMATS = [".docx", ".pdf", ".xlsx", ".csv", ".txt", ".pptx", ".json", ".html", ".md", ".xml", ".png", ".jpg", ".rtf", ".py", ".js", ".sql", ".yaml", ".css", ".log", ".zip", ".odt", ".tsv", ".ts", ".java", ".cpp", ".c", ".cs", ".go", ".rb", ".php", ".sh", ".r", ".ini", ".toml", ".env", ".svg", ".gif", ".tiff", ".key", ".epub", ".ipynb", ".vtt", ".eml", ".xhtml", ".parquet", ".hl7", ".dcm", ".fhir+json"];
 const ENTROPY = [
   // Medicine
@@ -1120,10 +1187,10 @@ function initMechSel(){
   sel.innerHTML = '<option value="">Any consideration</option>';
   refreshCustomInto('mechanism', sel);
   const og1 = document.createElement('optgroup'); og1.label = 'Categories';
-  [["numbers","Numbers & units"],["statistics","Statistics & data"],["time","Time & dates"],
+  [["numbers","Numbers & units"],["statistics","Statistics & data"],["temporal","Time & dates"],
    ["records","Records & documentation"],["rules","Rules & compliance"],
-   ["clinical","Clinical & physical facts"],["language","Language & logic"],
-   ["human","Human & social"]]
+   ["physical","Physical & procedural"],["language","Language & logic"],
+   ["human error","Human error"]]
     .forEach(([t,label]) => og1.appendChild(new Option('Category: ' + label, 'tag:' + t)));
   sel.appendChild(og1);
   const og2 = document.createElement('optgroup'); og2.label = 'Considerations';
