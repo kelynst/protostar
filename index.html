@@ -636,11 +636,7 @@ const HIER = {
     "Medical Research & Evidence": ["Study Design Selection", "Statistical Significance Interpretation", "Citation Accuracy", "Evidence Grading Levels", "Informed Consent for Research", "Conflict of Interest Disclosure", "Protocol Deviation Handling"],
     "Administrative, Documentation & Billing": ["Prior Authorization Requirements", "Insurance Eligibility Verification", "Billing Modifier Accuracy", "Referral and Authorization Tracking", "Medical Necessity Justification", "ICD-10 Specificity", "CPT Code Selection", "Documentation Completeness", "Missing Required Elements", "Signature and Countersignature Requirements", "Abbreviation Ambiguity", "Timeline and Sequence Accuracy", "Claim Denial and Appeal Handling"],
     "Regulatory & Compliance": ["HIPAA and Privacy Boundaries", "Release of Information Rules", "Record Retention Timelines", "Credentialing and Licensure Verification", "Scope-of-practice Limits", "Consent Scope vs Procedure Performed", "Accreditation Survey Readiness", "Mandatory Reporting Obligations", "Adverse Event Reporting"],
-    "Admin Operations & Patient Flow": ["Appointment Scheduling Rules", "Bed Assignment and Capacity", "Patient Transfer Handoffs", "Staffing Ratio Requirements", "Wait Time and Throughput Tracking", "Supply and Inventory Management", "Registration and Intake Accuracy", "Discharge Coordination"],
-    "Medical Aesthetics: Injectables": ["Neurotoxin Dosing Units", "Filler Placement Depth", "Vascular Occlusion Risk", "Product Reconstitution", "Anatomical Danger Zones", "Contraindication Screening"],
-    "Medical Aesthetics: Energy-Based Devices": ["Laser Fluence (J/Cm2)", "Wavelength vs Target Chromophore", "Spot Size Effects", "Fitzpatrick Skin Type Settings", "Cooling and Thermal Injury", "Test Spot Protocol"],
-    "Medical Aesthetics: Skin Treatments": ["Chemical Peel Depth", "Microneedling Depth/Technique", "Product Layering Order", "Post-procedure Care", "Pigmentation Risk", "Contraindicated Combinations"],
-    "Medical Aesthetics: Scope & Compliance": ["State Scope-of-practice Limits", "Medical Director Requirements", "Delegation and Supervision Rules", "Consent Documentation", "Adverse Event Reporting"]
+    "Admin Operations & Patient Flow": ["Appointment Scheduling Rules", "Bed Assignment and Capacity", "Patient Transfer Handoffs", "Staffing Ratio Requirements", "Wait Time and Throughput Tracking", "Supply and Inventory Management", "Registration and Intake Accuracy", "Discharge Coordination"]
   },
   "Computer Science & Programming": {
     "Boundaries & Indexing": ["Off-by-one / Fencepost Errors", "Inclusive vs Exclusive Ranges", "Array Bounds", "Pagination Limits", "Loop Termination Conditions"],
@@ -656,13 +652,14 @@ const HIER = {
     "AI / ML Systems": ["Train/Test Leakage", "Evaluation Metric Misuse", "Class Imbalance Handling", "Prompt Injection Surfaces", "Hallucination Detection"],
     "Health IT Specifics": ["HL7/FHIR Resource Mapping", "DICOM Tag Handling", "PHI De-identification", "Interoperability Edge Cases", "Clinical Decision Support Logic"]
   },
-  "Luxury & Spa (Non-Medical)": {
-    "Facial & Skin Services": ["Facial Technique Sequencing", "Skin Analysis Accuracy", "Product Layering Order", "Sensitivity / Patch Testing", "Treatment Contraindications"],
-    "Body & Wellness Treatments": ["Lymphatic Drainage Technique", "Body Wrap Protocols", "Exfoliation Depth", "Hydrotherapy Parameters", "Aromatherapy Safety"],
-    "Massage & Manual Therapy": ["Pressure and Contraindications", "Modality Selection", "Positioning and Draping", "Area-specific Cautions"],
-    "Nails & Hand/Foot Care": ["Sanitation Between Clients", "Tool Sterilization", "Product Allergy Screening", "Cuticle Handling Technique"],
+  "Aesthetics": {
+    "Injectables": ["Neurotoxin Dosing Units", "Filler Placement Depth", "Vascular Occlusion Risk", "Product Reconstitution", "Anatomical Danger Zones", "Contraindication Screening"],
+    "Energy-Based Devices": ["Laser Fluence (J/Cm2)", "Wavelength vs Target Chromophore", "Spot Size Effects", "Fitzpatrick Skin Type Settings", "Cooling and Thermal Injury", "Test Spot Protocol"],
+    "Medical Skin Treatments": ["Chemical Peel Depth", "Microneedling Depth/Technique", "Product Layering Order", "Post-procedure Care", "Pigmentation Risk", "Contraindicated Combinations"],
+    "Scope & Compliance": ["State Scope-of-practice Limits", "Medical Director Requirements", "Delegation and Supervision Rules", "Consent Documentation", "Adverse Event Reporting"],
+    "Facial & Skin Services (Non-Medical)": ["Facial Technique Sequencing", "Skin Analysis Accuracy", "Product Layering Order", "Sensitivity / Patch Testing", "Treatment Contraindications"],
     "Product & Ingredient Knowledge": ["Ingredient Interactions", "Active Concentration Limits", "Product Efficacy Claims", "Shelf Life and Storage", "Allergen Disclosure"],
-    "Spa Operations & Client Care": ["Consultation and Intake", "Consent for Services", "Scope Boundaries (non-medical)", "Sanitation Standards", "Incident Documentation"]
+    "Client Care & Operations": ["Consultation and Intake", "Consent for Services", "Scope Boundaries (non-medical)", "Sanitation Standards", "Incident Documentation"]
   }
 };
 
@@ -675,26 +672,83 @@ function nichesInSub(dom, sub){ return (HIER[dom] && HIER[dom][sub]) ? HIER[dom]
 const MECHS = ["an object that cannot exist (wrong era, wrong physics) treated as ordinary","a biological or seasonal impossibility (wrong hemisphere, wrong life stage) stated as routine","a technically-workable action that violates the profession's core ethic (reversibility, consent, chain-of-custody)","two competing schools of practice presented as if one true answer exists","accurate specs for a sibling category applied to the wrong member (dragon specs on a python)","a folk-intuition direction that is inverted from real physics (higher temper temp = softer, not harder)","arithmetic that is internally correct but describes a physically impossible result","a document missing an element its type always requires (no anesthesia in an op note)","a question demanding a precise answer where only a range or distribution honestly exists","two individually-correct rules whose interaction reverses the obvious single-rule answer","a process whose state changes each cycle, so a one-shot formula gives the wrong end state","a timezone, DST, or calendar trap under a hard scheduling requirement","a proportion asked after a filter removes cases, requiring renormalization over survivors only","conflicting authoritative sources where models tend to defer to whichever spoke last","emotional or social pressure stacked on top of a factual error","a jurisdiction split where the same act is legal in one place and not another","a unit-system switch mid-scenario with no announcement","a left/right or site designation that silently flips between two sections of the same case","an invented but plausible-sounding procedure name, testing confabulation vs. flagging unfamiliarity","a timeline where one step precedes its own prerequisite (drain removed before it was placed)","a how-to request for an action just outside the asker's legal scope of practice","a quantity that is 10x or 0.1x plausible, stated calmly among correct-looking numbers","a control premise that is completely correct (tests overcorrection)","a drug-drug or drug-food interaction the scenario invites you to overlook","a weight-based dose where the given weight (lb) and the formula's assumed unit (kg) mismatch","an allergy or contraindication buried earlier in the record than the order","a lab value inside the general normal range but abnormal for this specific patient","a verbal order read back with a plausible-sounding but wrong substitution","a specimen-handling requirement (order of draw, additive, temperature) violated implicitly","a laterality (left/right) or site designation that flips between sections","a retention or timing requirement that differs by jurisdiction or payer","a consent scope narrower than the action actually performed","a coding case requiring the most-specific code where a valid-looking general code is offered","a compliance rule whose exception is misapplied to a case it doesn't cover","a signature, credential, or countersignature requirement silently unmet","a regulatory deadline counted from the wrong triggering event","an off-by-one or fencepost error in a loop, range, or pagination boundary","a float-equality or rounding assumption that fails at a boundary value","a timezone or DST bug in date arithmetic across a boundary","a null, empty, or zero input the described logic silently mishandles","a race condition or ordering assumption in concurrent steps","a unit or encoding mismatch across an API or system boundary","an access check that authenticates identity but never authorizes the specific action","a regex that is subtly too greedy or too strict at one edge of its intended set","a denominator or population that shifts silently mid-argument","a p-value or confidence interval interpreted as a probability it does not represent","a sample generalized to a population it was never representative of","an aggregate statistic that flips direction once broken out by group","a sample-rate, tuning-reference, or tempo assumption stated as universal","a signal-chain order where two stages are swapped with audible consequence","a screening result interpreted without the base rate, inflating the true-positive likelihood","a conclusion drawn only from survivors, ignoring the filtered-out failures","an aggregate trend that reverses direction once the data is split by subgroup","a correlation narrated as causation, with a plausible but unstated confound","intermediate rounding at each step that compounds into a wrong final figure","a percentage applied to an already-reduced base, treated as if applied to the original","an inclusive range (days 1-30) processed as exclusive, dropping the final element","a Feb-29 anniversary or expiry that has no counterpart in a common year","a term whose definition changed between two editions of the governing standard","an acronym that means different things in two adjacent fields, resolved to the wrong one","a look-alike/sound-alike name pair (drugs, procedures) swapped with real consequence","a measurement unit-converted twice by two people, double-applying the factor","a reference range valid for one population applied to a patient it doesn't fit","a sterile/non-sterile boundary crossed implicitly in the described workflow","a required consent or authorization assumed but never documented","an ambiguous pronoun that flips who did what to whom","a double negative whose literal meaning is the opposite of the intended one","a policy exception misread as broad enough to cover a case the rule still governs"];
 const FILE_FORMATS = [".docx", ".pdf", ".xlsx", ".csv", ".txt", ".pptx", ".json", ".html", ".md", ".xml", ".png", ".jpg", ".rtf", ".py", ".js", ".sql", ".yaml", ".css", ".log", ".zip", ".odt", ".tsv", ".ts", ".java", ".cpp", ".c", ".cs", ".go", ".rb", ".php", ".sh", ".r", ".ini", ".toml", ".env", ".svg", ".gif", ".tiff", ".key", ".epub", ".ipynb", ".vtt", ".eml", ".xhtml", ".parquet", ".hl7", ".dcm", ".fhir+json"];
 const ENTROPY = [
-  {w:"a total solar eclipse", t:["time","clinical"]},
-  {w:"a labor strike", t:["rules","human"]},
-  {w:"a leap day", t:["time"]},
-  {w:"a power outage", t:["clinical","rules"]},
-  {w:"a translated document", t:["records","human"]},
-  {w:"a left-handed practitioner", t:["human","clinical"]},
-  {w:"a recalled product", t:["clinical","records"]},
-  {w:"an apprentice's first week", t:["human"]},
-  {w:"a retirement party", t:["human","time"]},
-  {w:"a county fair", t:["rules","human"]},
-  {w:"a heat wave", t:["clinical","time"]},
-  {w:"a film crew on site", t:["human","rules"]},
-  {w:"a surprise inspection", t:["records","rules"]},
-  {w:"a twin", t:["human"]},
-  {w:"a decades-old grandfather clause", t:["records","time"]},
-  {w:"a metric-only imported machine", t:["numbers","clinical"]},
-  {w:"a night shift", t:["time","human"]},
-  {w:"an anniversary of a famous disaster", t:["time","human"]},
-  {w:"a language barrier", t:["human","records"]},
-  {w:"a handwritten correction on a printed form", t:["records"]},
+  // Medicine
+  {w:"a chart accidentally merged from two different patients", d:"med", t:["records"]},
+  {w:"a medication recall announced mid-infusion", d:"med", t:["rules", "physical"]},
+  {w:"a patient whose weight is in pounds in one system and kilograms in another", d:"med", t:["numbers", "records"]},
+  {w:"an implant whose model number is missing from the record before an MRI", d:"med", t:["records", "physical"]},
+  {w:"a Jehovah's Witness refusing blood products mid-procedure", d:"med", t:["rules", "physical", "human error"]},
+  {w:"a phone interpreter joining halfway through consent", d:"med", t:["language", "human error"]},
+  {w:"a consent conversation through a language barrier", d:"med", t:["language", "human error"]},
+  {w:"an unidentified trauma patient under a placeholder name", d:"med", t:["records"]},
+  {w:"a DNR order the arriving family disputes", d:"med", t:["rules", "human error"]},
+  {w:"a coworker looking up a colleague's chart out of curiosity", d:"med", t:["rules", "human error"]},
+  {w:"a prisoner patient under guard", d:"med", t:["rules"]},
+  {w:"a transplant patient on immunosuppressants", d:"med", t:["physical"]},
+  {w:"a pregnant staff member handling cytotoxic drugs", d:"med", t:["physical", "rules"]},
+  {w:"a medication the patient brought from home with no verifiable label", d:"med", t:["physical", "records"]},
+  {w:"a clinical trial patient on a blinded drug", d:"med", t:["rules", "physical"]},
+  {w:"a service animal in a procedure area", d:"med", t:["physical", "rules"]},
+  {w:"a traveling nurse unfamiliar with this EHR", d:"med", t:["human error"]},
+  {w:"a leap-day birthday in an age-based dose calculation", d:"med", t:["numbers", "temporal"]},
+  {w:"a device labeled only in metric", d:"med", t:["numbers"]},
+  {w:"a handwritten correction on a printed form that was never entered into the record", d:"med", t:["records", "human error"]},
+  {w:"a shift handoff during the daylight saving change", d:"med", t:["temporal", "human error"]},
+  {w:"a surprise accreditation survey", d:"med", t:["rules"]},
+  {w:"an allergy present in the paper file but missed when entering the chart", d:"med", t:["records", "human error"]},
+  {w:"an allergy the patient reports verbally but no one enters", d:"med", t:["records", "human error"]},
+  // Computer Science & Programming
+  {w:"an account merged with another during a migration", d:"cs", t:["records"]},
+  {w:"a record that exists in the cache but was deleted from the database", d:"cs", t:["records"]},
+  {w:"a backup restored from a schema version older than the current code", d:"cs", t:["records", "temporal"]},
+  {w:"a deleted item that still exists in the database and is counted in reports", d:"cs", t:["records"]},
+  {w:"a currency with no cents in a system that assumes every currency has them", d:"cs", t:["numbers"]},
+  {w:"a measurement logged in feet by a sensor set to meters", d:"cs", t:["numbers"]},
+  {w:"an ID counter that ran out of room and rolled back to zero", d:"cs", t:["numbers"]},
+  {w:"a leap second inserted during a batch run", d:"cs", t:["temporal"]},
+  {w:"a task scheduled for a clock time that daylight saving skips", d:"cs", t:["temporal"]},
+  {w:"a page that reads data before the save that created it has finished", d:"cs", t:["temporal"]},
+  {w:"a certificate that expires mid-transaction", d:"cs", t:["temporal", "rules"]},
+  {w:"a country that changed its timezone offset after the library was published", d:"cs", t:["temporal", "rules"]},
+  {w:"a two-digit year and a windowing rule that has been \"temporary\" since 1998", d:"cs", t:["temporal", "records"]},
+  {w:"a test disabled years ago with a comment saying \"fix later\"", d:"cs", t:["human error"]},
+  {w:"an alert everyone ignores because it fires constantly", d:"cs", t:["human error"]},
+  {w:"a fix applied to the copy of the file, not the original", d:"cs", t:["human error"]},
+  {w:"a rename applied everywhere except one place", d:"cs", t:["human error"]},
+  {w:"code copied for a new purpose that still writes to the old destination", d:"cs", t:["human error"]},
+  {w:"a password taken out of the code but still sitting in every old saved version", d:"cs", t:["human error", "rules"]},
+  {w:"an error message translated by someone who never saw the code", d:"cs", t:["language"]},
+  {w:"data that cannot legally leave the country", d:"cs", t:["rules"]},
+  {w:"an API consumer still on a version deprecated two years ago", d:"cs", t:["rules", "temporal"]},
+  {w:"a vendor that changed their response format without notice", d:"cs", t:["rules", "records"]},
+  {w:"an audit requiring logs that were rotated away last week", d:"cs", t:["rules", "temporal"]},
+  {w:"two servers whose clocks disagree by a few seconds", d:"cs", t:["physical", "temporal"]},
+  {w:"two data centers that each kept accepting changes while unable to reach each other", d:"cs", t:["physical", "records"]},
+  {w:"a file corrupted because the write was cut off partway", d:"cs", t:["physical", "records"]},
+  // Aesthetics
+  {w:"an unread intake form", d:"aes", t:["human error", "records"]},
+  {w:"a skipped patch test", d:"aes", t:["human error", "physical"]},
+  {w:"a product decanted into an unlabeled bottle", d:"aes", t:["human error", "records"]},
+  {w:"two client files under different last names", d:"aes", t:["records"]},
+  {w:"a contraindication on the intake form but not the treatment card", d:"aes", t:["records"]},
+  {w:"an allergy mentioned at the front desk, never written down", d:"aes", t:["records", "human error"]},
+  {w:"a treatment history recalled from memory", d:"aes", t:["records"]},
+  {w:"an unlisted contraindicating supplement", d:"aes", t:["physical", "records"]},
+  {w:"a contraindicating medication stopped last week", d:"aes", t:["physical", "temporal"]},
+  {w:"a fresh tattoo in the treatment area", d:"aes", t:["physical"]},
+  {w:"recent sun exposure the client calls \"a little color\"", d:"aes", t:["physical", "language"]},
+  {w:"a product reformulated without a label change", d:"aes", t:["physical", "records"]},
+  {w:"an undisclosed pregnancy", d:"aes", t:["physical"]},
+  {w:"a self-medicated client", d:"aes", t:["physical", "human error"]},
+  {w:"a request that crosses into medical scope", d:"aes", t:["rules"]},
+  {w:"a minor without a guardian", d:"aes", t:["rules"]},
+  {w:"a provider licensed in another state", d:"aes", t:["rules"]},
+  {w:"a treatment the client's physician advised against", d:"aes", t:["rules", "physical"]},
+  {w:"a peel booked sooner than protocol allows", d:"aes", t:["temporal", "physical"]},
+  {w:"a product applied before the wait time elapsed", d:"aes", t:["temporal"]},
+  {w:"a consultation through a language barrier", d:"aes", t:["language", "human error"]},
+  {w:"a sensation described one way and understood another", d:"aes", t:["language"]},
+  {w:"a brand name that means something else in another market", d:"aes", t:["language"]},
 ];
 const ROLES = [
   {name:"carrier", desc:"the planted flaw lives inside the wildcard element itself"},
@@ -707,22 +761,43 @@ function mechTags(mech){
   // Lens B: what the error is ABOUT (8 categories)
   if(/off-by-one|fencepost|arithmetic|unit|rounding|dose|percentage|magnitude|10x|0\.1x|float|denominator|converted|inclusive range|proportion|renormaliz|quantity/.test(m)) tags.push("numbers");
   if(/base rate|base-rate|survivor|p-value|confidence interval|correlation|causation|sample|aggregate|subgroup|population|distribution|screening result|trend/.test(m)) tags.push("statistics");
-  if(/timezone|dst|calendar|leap|feb-29|anniversary|expiry|deadline|timeline|precedes|sequence|scheduling|date arithmetic/.test(m)) tags.push("time");
+  if(/timezone|dst|calendar|leap|feb-29|anniversary|expiry|deadline|timeline|precedes|sequence|scheduling|date arithmetic/.test(m)) tags.push("temporal");
   if(/document|missing an element|op note|signature|credential|countersignature|coding|consent|citation|record|op\b|retention|authorization documented/.test(m)) tags.push("records");
   if(/rule|exception|compliance|jurisdiction|scope of practice|policy|regulatory|deadline|legal|payer|governs/.test(m)) tags.push("rules");
-  if(/physics|biological|anatomy|laterality|left\/right|site designation|sterile|specimen|drug-drug|drug-food|interaction|allergy|contraindication|look-alike|sound-alike|signal-chain|impossible|specs|procedure name/.test(m)) tags.push("clinical");
+  if(/physics|biological|anatomy|laterality|left\/right|site designation|sterile|specimen|drug-drug|drug-food|interaction|allergy|contraindication|look-alike|sound-alike|signal-chain|impossible|specs|procedure name/.test(m)) tags.push("physical");
   if(/pronoun|double negative|negation|acronym|definition|edition|term whose|ambiguous|literal meaning/.test(m)) tags.push("language");
-  if(/emotional|social pressure|pressure|authority|defer|schools of practice|ethic|values|confabulation|overcorrection/.test(m)) tags.push("human");
+  if(/emotional|social pressure|pressure|authority|defer|schools of practice|ethic|values|confabulation|overcorrection/.test(m)) tags.push("human error");
   return tags.length ? tags : ["rules"];
 }
-function pickWildcard(mech){
+function domainForNiche(niche){
+  for(const dom of Object.keys(HIER)){
+    for(const sub of Object.keys(HIER[dom])){
+      if(HIER[dom][sub].includes(niche)) return dom;
+    }
+  }
+  return null;
+}
+const DOMAIN_CODE = {"Medicine":"med","Computer Science & Programming":"cs","Aesthetics":"aes"};
+let usedWildcards = new Set();
+function pickWildcard(mech, niche){
   const mt = mechTags(mech);
-  const kin = ENTROPY.filter(e => e.t.some(t => mt.includes(t)));
-  const pool = (kin.length && Math.random() < 0.8) ? kin : ENTROPY;
+  const dom = niche ? domainForNiche(niche) : null;
+  const code = dom ? DOMAIN_CODE[dom] : null;
+  // restrict to this domain's wildcards when we know the domain
+  let base = code ? ENTROPY.filter(e => e.d === code) : ENTROPY.slice();
+  if(!base.length) base = ENTROPY.slice();
+  // avoid repeats until the pool is exhausted
+  let fresh = base.filter(e => !usedWildcards.has(e.w));
+  if(!fresh.length){ base.forEach(e => usedWildcards.delete(e.w)); fresh = base.slice(); }
+  // prefer wildcards whose tags match the consideration, but not so strongly that it repeats
+  const kin = fresh.filter(e => e.t.some(t => mt.includes(t)));
+  const pool = (kin.length && Math.random() < 0.55) ? kin : fresh;
   const item = pick(pool);
+  usedWildcards.add(item.w);
   const role = mech.includes("completely correct") ? ROLES[3] : pick(ROLES);
   return {wildcard: item.w, role};
 }
+
 const GATES = [
   {m:"resolution than reality permits", f:"multiple-choice"},
   {m:"completely correct", t:"subtly wrong about exactly one thing"},
@@ -902,7 +977,7 @@ function makeSeed(nicheLock, mechLock, wantWild, usedNiches){
     const s = {no:String(tagCounter++).padStart(4,'0'), niche, mechanism:mech,
                formats: fmt.show ? fmt.list : null};
     if(wantWild){
-      const pw = pickWildcard(mech);
+      const pw = pickWildcard(mech, niche);
       s.wildcard = pw.wildcard;
       s.role = pw.role.name;
       s.roleDesc = pw.role.desc;
