@@ -1,13 +1,3 @@
-<!--
-Protostar v1.0.1
-Copyright (c) 2026 Kelyn Stine. All Rights Reserved.
-Proprietary - Evaluation Only. No AI Training.
-Contact: kelynstine@gmail.com for licensing
--->
-<meta name="robots" content="noai, noimageai">
-<meta name="tdm-reservation" content="1">
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -427,6 +417,57 @@ Contact: kelynstine@gmail.com for licensing
 </style>
 </head>
 <body>
+<div id="gate" style="position:fixed; inset:0; z-index:9999; background:#0A1120;
+  display:flex; align-items:center; justify-content:center; padding:1.5rem; overflow:hidden;">
+  <div class="stars" style="z-index:0;"><i></i></div>
+  <style>
+    #gate #gatePw:focus{outline:none; border-color:#fff !important; box-shadow:0 0 0 1px #fff;}
+    #gate #gatePw::selection{background:#fff; color:#0A1120;}
+    #gate #gatePw::-moz-selection{background:#fff; color:#0A1120;}
+    #gate #gateBtn:focus{outline:none; box-shadow:0 0 0 2px #fff;}
+    #gate ::selection{background:#fff; color:#0A1120;}
+  </style>
+  <div style="max-width:360px; width:100%; text-align:center; font-family:'Inter',system-ui,sans-serif; position:relative; z-index:1;">
+    <h1 style="font-family:'IBM Plex Mono',monospace; color:#F4F6FA; font-size:2rem;
+      margin:0 0 .3rem; font-weight:700;">Protostar<span style="color:#F4F6FA;">.</span></h1>
+    <p style="color:#C4C9D2; font-size:.9rem; margin:0 0 1.5rem; font-family:'Inter',system-ui,sans-serif;">Enter the password to continue.</p>
+    <input id="gatePw" type="password" placeholder="Password" autocomplete="current-password"
+      style="width:100%; padding:.7rem .8rem; font-size:1rem; border:1px solid rgba(255,255,255,.55);
+      border-radius:8px; background:#0A1120; color:#F4F6FA; box-sizing:border-box; margin-bottom:.7rem;
+      font-family:'IBM Plex Mono',monospace;">
+    <button id="gateBtn" style="width:100%; padding:.75rem; font-size:.95rem; font-weight:600;
+      border:1px solid rgba(255,255,255,.12); border-radius:9px; cursor:pointer; color:#1A1D24;
+      font-family:'Inter',system-ui,sans-serif;
+      background:linear-gradient(160deg,#E8EAEE,#B9BEC8 45%,#8C93A1);">Enter</button>
+    <p id="gateErr" style="color:#e0918a; font-size:.82rem; margin:.7rem 0 0; min-height:1rem; font-family:'Inter',system-ui,sans-serif;"></p>
+  </div>
+</div>
+</div>
+<script>
+(function(){
+  // ==== Change this to whatever password you want your team to use: ====
+  var PASSWORD = "protost@r26";
+  // =====================================================================
+  var gate = document.getElementById('gate');
+  var pw = document.getElementById('gatePw');
+  var btn = document.getElementById('gateBtn');
+  var err = document.getElementById('gateErr');
+  try{ if(sessionStorage.getItem('ps_unlocked') === '1'){ gate.style.display='none'; } }catch(e){}
+  function tryUnlock(){
+    if(pw.value === PASSWORD){
+      try{ sessionStorage.setItem('ps_unlocked','1'); }catch(e){}
+      gate.style.display='none';
+    }else{
+      err.textContent = 'Incorrect password. Try again.';
+      pw.value=''; pw.focus();
+    }
+  }
+  btn.addEventListener('click', tryUnlock);
+  pw.addEventListener('keydown', function(e){ if(e.key==='Enter') tryUnlock(); });
+  pw.focus();
+})();
+</script>
+
 <noscript>
   <div style="background:#241f1f; color:#f0ede6; border:1px solid #6b4a4a; border-radius:10px;
     padding:1.2rem 1.4rem; margin:1.5rem auto; max-width:640px; font-family:system-ui,sans-serif;
