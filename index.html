@@ -452,10 +452,10 @@
   var pw = document.getElementById('gatePw');
   var btn = document.getElementById('gateBtn');
   var err = document.getElementById('gateErr');
-  try{ if(sessionStorage.getItem('ps_unlocked') === '1'){ gate.style.display='none'; } }catch(e){}
+  try{ if(sessionStorage.getItem('ps_unlocked_v3') === '1'){ gate.style.display='none'; } }catch(e){}
   function tryUnlock(){
     if(pw.value === PASSWORD){
-      try{ sessionStorage.setItem('ps_unlocked','1'); }catch(e){}
+      try{ sessionStorage.setItem('ps_unlocked_v3','1'); }catch(e){}
       gate.style.display='none';
     }else{
       err.textContent = 'Incorrect password. Try again.';
