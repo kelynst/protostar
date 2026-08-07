@@ -344,6 +344,10 @@
   .dumpline .rm{border:none; background:none; color:var(--ink-soft); cursor:pointer; font-size:1rem; flex-shrink:0; padding:0 .2rem;}
   .dumpline .rm:hover{color:var(--scrap);}
   .dumpline.skip{opacity:.45;}
+  .dumpline.nofit{opacity:.5;}
+  .dumpline.nofit .txt{text-decoration:line-through; text-decoration-color:var(--line-gray);}
+  .nofitnote{font-family:'Inter',sans-serif; font-size:.7rem; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--ink-soft); flex:0 0 auto; white-space:nowrap;}
   .chip{font-family:'IBM Plex Mono',monospace; font-size:.72rem; background:var(--panel-2);
     border:1px solid var(--line); border-radius:12px; padding:.2rem .55rem; display:flex;
     align-items:center; gap:.35rem;}
@@ -1370,14 +1374,38 @@ const STOP = new Set(('a an the and or but if then this that these those of to i
   +'especially getting theres wheres model slips slip across steps doesnt match cases issues '
   +'suspicious whole thing same some these those hit help helps too been being gets').split(' '));
 
+// Does this term look like it belongs to an existing niche? Compares word stems
+// against every known niche so "anticoagulants" can match "Anticoagulation Management".
+function looksLikeNiche(s){
+  const stem = w => w.replace(/(ing|ed|es|s)$/,'');
+  const terms = s.split(/\s+/).filter(w => w.length >= 5).map(stem);
+  if(!terms.length) return false;
+  for(const d in HIER){
+    for(const sub in HIER[d]){
+      for(const n of HIER[d][sub]){
+        const nWords = n.toLowerCase().split(/[^a-z]+/).filter(w => w.length >= 5).map(stem);
+        for(const t of terms){
+          for(const nw of nWords){
+            const a = t.slice(0,6), b = nw.slice(0,6);
+            if(a.length >= 5 && a === b) return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
 function guessField(term){
   const s = term.trim().toLowerCase();
-  if(!s) return 'skip';
+  if(!s) return 'none';
   if(/^\.\w+/.test(s) || /\.(docx|pdf|xlsx|csv|json|xml|html|pptx|py|js|md|txt)\b/.test(s)) return 'format';
   if(Object.keys(HIER).some(d => d.toLowerCase() === s)) return 'domain';
   for(const d in HIER){ if(Object.keys(HIER[d]).some(sub => sub.toLowerCase() === s)) return 'subdomain'; }
   if(s.split(' ').length >= 5 || /\b(error|mismatch|missing|wrong|flip|confusion|overlook|assume|fails?|incorrect|interaction)\b/.test(s)) return 'mechanism';
-  return 'niche';
+  // exact niche match, or close enough to an existing niche to be a topic area
+  for(const d in HIER){ for(const sub in HIER[d]){ if(HIER[d][sub].some(n => n.toLowerCase() === s)) return 'niche'; } }
+  if(looksLikeNiche(s)) return 'niche';
+  return 'none';   // specific term with no home in the structure
 }
 
 // Heuristic keyword extraction from freeform prose. NOT AI, simple rules only.
@@ -1453,15 +1481,25 @@ function renderDumpLines(items, autoGuess){
     row.className = 'dumpline';
     const txt = document.createElement('span'); txt.className='txt'; txt.textContent = item;
     const arrow = document.createElement('span'); arrow.className='arrow'; arrow.textContent = '→';
-    const sel = document.createElement('select');
-    FIELD_OPTS.forEach(([v,l]) => sel.appendChild(new Option(l, v)));
-    sel.value = autoGuess ? guessField(item) : 'niche';
-    sel.addEventListener('change', ()=> row.classList.toggle('skip', sel.value==='skip'));
-    row.classList.toggle('skip', sel.value==='skip');
+    const guess = autoGuess ? guessField(item) : 'niche';
     const rm = document.createElement('button'); rm.className='rm'; rm.textContent='×';
     rm.title='remove'; rm.addEventListener('click', ()=> row.remove());
-    row.appendChild(txt); row.appendChild(arrow); row.appendChild(sel); row.appendChild(rm);
-    row.dataset.line = item; row._sel = sel;
+    if(guess === 'none'){
+      // nothing in the structure fits this term, so offer no field at all
+      row.classList.add('nofit');
+      const why = document.createElement('span'); why.className='nofitnote';
+      why.textContent = 'no field fits';
+      row.appendChild(txt); row.appendChild(why); row.appendChild(rm);
+      row.dataset.line = item; row._sel = null;
+    } else {
+      const sel = document.createElement('select');
+      FIELD_OPTS.forEach(([v,l]) => sel.appendChild(new Option(l, v)));
+      sel.value = guess;
+      sel.addEventListener('change', ()=> row.classList.toggle('skip', sel.value==='skip'));
+      row.classList.toggle('skip', sel.value==='skip');
+      row.appendChild(txt); row.appendChild(arrow); row.appendChild(sel); row.appendChild(rm);
+      row.dataset.line = item; row._sel = sel;
+    }
     box.appendChild(row);
   });
   document.getElementById('dumpCommitRow').style.display = items.length ? 'flex' : 'none';
@@ -1490,6 +1528,7 @@ document.getElementById('dumpCommit').addEventListener('click', ()=>{
   const rows = [...document.querySelectorAll('#dumpLines .dumpline')];
   let added = 0;
   rows.forEach(row=>{
+    if(!row._sel) return;                       // unassignable term, nothing to add
     const field = row._sel.value, val = row.dataset.line;
     if(field === 'skip' || !val) return;
     if(MY[field] && !MY[field].includes(val)){ MY[field].push(val); added++; }
