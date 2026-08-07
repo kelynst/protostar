@@ -407,13 +407,15 @@
     .scope{padding:1.1rem 1.2rem;}
     .scope-lead{font-size:1.2rem !important;}
     header .sub{font-size:1.2rem;}
-    /* stack keyword rows on mobile so the term never gets crushed to one character */
-    .dumpline{flex-wrap:wrap; align-items:stretch; gap:.45rem;}
-    .dumpline .txt{flex:1 1 100%; min-width:0; margin-bottom:0; font-size:.8rem;
-      overflow-wrap:anywhere;}
+    /* keyword rows stay on one line: term flexes, dropdown is compact, X is small */
+    .dumpline{flex-wrap:nowrap; align-items:center; gap:.4rem;}
+    .dumpline .txt{flex:1 1 auto; min-width:0; margin-bottom:0; font-size:.78rem;
+      overflow-wrap:anywhere; line-height:1.3;}
     .dumpline .arrow{display:none;}
-    .dumpline select{flex:1 1 auto; max-width:none; min-width:0; font-size:.8rem;}
-    .dumpline .rm{flex:0 0 auto; align-self:center; padding:0 .5rem;}
+    .dumpline select{flex:0 0 auto; width:6.6rem; min-width:0; max-width:none;
+      font-size:.75rem; padding:.4rem 1rem .4rem .4rem;}
+    .dumpline .rm{flex:0 0 auto; width:auto !important; min-width:0; padding:0 .3rem;
+      font-size:1.1rem;}
     .addrow{flex-wrap:wrap;}
     .addrow select, .addrow input, .addrow button{width:100%;}
   }
