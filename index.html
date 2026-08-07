@@ -407,10 +407,13 @@
     .scope{padding:1.1rem 1.2rem;}
     .scope-lead{font-size:1.2rem !important;}
     header .sub{font-size:1.2rem;}
-    .dumpline{flex-wrap:nowrap; align-items:center;}
-    .dumpline .txt{flex:1 1 auto; margin-bottom:0; font-size:.8rem;}
+    /* stack keyword rows on mobile so the term never gets crushed to one character */
+    .dumpline{flex-wrap:wrap; align-items:stretch; gap:.45rem;}
+    .dumpline .txt{flex:1 1 100%; min-width:0; margin-bottom:0; font-size:.8rem;
+      overflow-wrap:anywhere;}
     .dumpline .arrow{display:none;}
-    .dumpline select{flex:0 0 auto; max-width:42%; font-size:.75rem;}
+    .dumpline select{flex:1 1 auto; max-width:none; min-width:0; font-size:.8rem;}
+    .dumpline .rm{flex:0 0 auto; align-self:center; padding:0 .5rem;}
     .addrow{flex-wrap:wrap;}
     .addrow select, .addrow input, .addrow button{width:100%;}
   }
@@ -649,6 +652,7 @@ const HIER = {
     "Public Health & Epidemiology": ["Reportable Condition Thresholds", "Outbreak Case Definitions", "Screening Program Criteria", "Vaccination Coverage Tracking", "Health Disparity Measurement", "Surveillance Data Interpretation", "Contact Tracing", "Incidence vs Prevalence", "Sensitivity and Specificity", "Herd Immunity Thresholds", "Epidemic Curves", "Risk Communication", "Quarantine and Isolation Authority", "Environmental Health Hazards", "Occupational Exposure Limits", "Health Policy Evaluation", "Vital Statistics and Registries", "Global Health and Travel", "Population Health Programs"],
     "Medical Research & Evidence": ["Study Design Selection", "Statistical Significance Interpretation", "Citation Accuracy", "Evidence Grading", "Informed Consent for Research", "Conflict of Interest Disclosure", "Protocol Deviations", "Sample Size and Power", "Confounding and Bias", "Randomization and Blinding", "Systematic Reviews and Meta-Analysis", "Absolute vs Relative Risk", "Confidence Intervals", "Surrogate vs Clinical Endpoints", "Publication Bias", "Guideline Development", "Data Integrity and Fabrication", "Reproducibility", "Preprints vs Peer Review", "Clinical Trial Phases"],
     "Administration & Operations": ["Prior Authorization", "Insurance Eligibility", "Billing Modifiers", "Referral and Authorization Tracking", "Medical Necessity", "ICD-10 Specificity", "CPT Code Selection", "Documentation Completeness", "Missing Required Elements", "Signature Requirements", "Abbreviation Ambiguity", "Timeline and Sequence Accuracy", "Claim Denials and Appeals", "Appointment Scheduling", "Bed Assignment and Capacity", "Patient Transfer Handoffs", "Staffing Ratios", "Wait Time and Throughput", "Supply and Inventory", "Registration and Intake", "Discharge Coordination"],
+    "Quality Improvement": ["Quality Assurance", "Quality Control", "Waste Reduction", "Evidence-Based Practice Implementation", "Process Improvement", "Root Cause Analysis", "Quality Metrics and Reporting", "Benchmarking", "Patient Safety Initiatives", "Incident and Near-Miss Reporting", "Readmission Reduction", "Protocol Development", "Protocol Compliance Monitoring"],
     "Regulatory & Compliance": ["HIPAA and Privacy Boundaries", "Release of Information", "Record Retention Timelines", "Credentialing and Licensure", "Scope-of-Practice Limits", "Consent Scope vs Procedure Performed", "Accreditation Survey Readiness", "Mandatory Reporting", "Adverse Event Reporting", "Informed Consent Requirements", "Minor Consent Rules", "Interpreter Requirements", "Advance Directive Compliance", "Patient Rights", "Incident Reporting", "Root Cause Analysis", "Quality Measure Reporting", "Audit Response", "Telehealth Regulations", "Controlled Substance Regulations", "Research Compliance (IRB)", "Conflict of Interest"]
   },
   "Computer Science & Programming": {
@@ -684,6 +688,14 @@ function nichesInSub(dom, sub){ return (HIER[dom] && HIER[dom][sub]) ? HIER[dom]
 
 
 const MECHS = [
+  "a measurement that improved because the definition changed, not the thing being measured",
+  "a comparison between two groups that are not actually comparable",
+  "a fix that moved the problem elsewhere rather than resolving it",
+  "a step recorded as complete when it was performed out of order",
+  "a rarely-reported problem whose low count is mistaken for a low rate",
+  "a trend called from too few data points to support one",
+  "a single case treated as evidence of a systemic pattern",
+  "a result that looks better once the harder cases are excluded",
   "an object that cannot exist (wrong era, wrong physics) treated as ordinary",
   "a biological or seasonal impossibility (wrong hemisphere, wrong life stage) stated as routine",
   "a technically-workable action that violates the profession's core ethic (reversibility, consent, chain-of-custody)",
@@ -754,6 +766,30 @@ const MECHS = [
 const FILE_FORMATS = [".docx", ".pdf", ".xlsx", ".csv", ".txt", ".pptx", ".json", ".html", ".md", ".xml", ".png", ".jpg", ".rtf", ".py", ".js", ".sql", ".yaml", ".css", ".log", ".zip", ".odt", ".tsv", ".ts", ".java", ".cpp", ".c", ".cs", ".go", ".rb", ".php", ".sh", ".r", ".ini", ".toml", ".env", ".svg", ".gif", ".tiff", ".key", ".epub", ".ipynb", ".vtt", ".eml", ".xhtml", ".parquet", ".hl7", ".dcm", ".fhir+json"];
 const ENTROPY = [
   // Medicine
+  {w:"a note copy-forwarded from a prior visit describing a condition the patient no longer has", d:"med", t:["records", "human error"]},
+  {w:"an alert dismissed reflexively because it fires on every patient", d:"med", t:["human error"]},
+  {w:"a correction entered on the wrong patient's chart", d:"med", t:["human error", "records"]},
+  {w:"a result acknowledged in the system but never actually read", d:"med", t:["human error", "records"]},
+  {w:"a protocol followed from memory because the printed copy is out of date", d:"med", t:["human error", "rules"]},
+  {w:"a verbal order given during a procedure and never written down", d:"med", t:["human error", "records"]},
+  {w:"a scanned outside record nobody has opened", d:"med", t:["records"]},
+  {w:"an allergy listed as a sensitivity in one system and a true allergy in another", d:"med", t:["records"]},
+  {w:"a diagnosis carried forward from an admission that was never confirmed", d:"med", t:["records"]},
+  {w:"a patient whose IV was restarted in the opposite arm without anyone updating the chart", d:"med", t:["physical", "records"]},
+  {w:"equipment borrowed from another unit with different default settings", d:"med", t:["physical"]},
+  {w:"a specimen that sat at room temperature longer than the protocol allows", d:"med", t:["physical", "temporal"]},
+  {w:"a consent signed for a procedure that changed after the patient was sedated", d:"med", t:["rules", "human error"]},
+  {w:"an order placed under a covering provider's name", d:"med", t:["rules", "records"]},
+  {w:"a protocol updated last week that half the unit hasn't seen", d:"med", t:["rules", "temporal"]},
+  {w:"a metric that improved because the definition changed, not the care", d:"med", t:["numbers", "records"]},
+  {w:"an audit scheduled far enough ahead that everyone prepared for it", d:"med", t:["rules", "temporal"]},
+  {w:"a process improvement that shifted the problem to another department", d:"med", t:["human error", "rules"]},
+  {w:"a protocol everyone follows on paper and works around in practice", d:"med", t:["human error", "rules"]},
+  {w:"an incident report filed weeks after the fact", d:"med", t:["temporal", "records"]},
+  {w:"a quality score that looks worse because the unit takes sicker patients", d:"med", t:["numbers"]},
+  {w:"an improvement that held for three months and then drifted back", d:"med", t:["temporal"]},
+  {w:"a checklist completed after the procedure rather than during", d:"med", t:["temporal", "human error"]},
+  {w:"a near miss nobody reported because nothing actually happened", d:"med", t:["human error", "records"]},
   {w:"a chart accidentally merged from two different patients", d:"med", t:["records"]},
   {w:"a medication recall announced mid-infusion", d:"med", t:["rules", "physical"]},
   {w:"a patient whose weight is in pounds in one system and kilograms in another", d:"med", t:["numbers", "records"]},
